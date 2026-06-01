@@ -1,30 +1,72 @@
 import { useState } from "react";
-import { Search, Heart, Eye, Star, ChevronDown, Menu, X } from "lucide-react";
+import {
+  Search,
+  Heart,
+  Menu,
+  X,
+  MessageCircle,
+  ExternalLink,
+  CheckCircle,
+} from "lucide-react";
+
+const WA_NUMBER = "6282220700245";
 
 const TEMPLATES = [
   {
     id: 1,
     title: "Sakura Garden",
-    designer: "Dua Jiwa Studio",
+    designer: "Farras",
     style: "Floral · Soft",
     price: "Rp 89.000",
     likes: 243,
     views: "4.1k",
     rating: 4.9,
-    src: "/templates/sakura-garden.jpg",
-    tag: "Bestseller",
+    src: "https://ik.imagekit.io/mnj81d29i/minang+jawa.png",
+    tag: "Laila & Ghuffron",
+    previewUrl: "https://lailadanghufran.framer.website/",
+    features: [
+      "Musik latar romantis",
+      "RSVP digital",
+      "Google Maps terintegrasi",
+      "Countdown timer",
+      "Galeri foto",
+    ],
+    desc: "Template elegan bernuansa bunga sakura. Cocok untuk pernikahan outdoor maupun indoor dengan tema soft & romantic.",
   },
   {
     id: 2,
     title: "Minimalist Ivory",
-    designer: "Dua Jiwa Studio",
+    designer: "Aisyha",
     style: "Minimal · Elegant",
     price: "Rp 79.000",
     likes: 187,
     views: "3.2k",
     rating: 4.8,
-    src: "/templates/minimalist-ivory.jpg",
-    tag: "New",
+    src: "https://ik.imagekit.io/mnj81d29i/Screenshot%202026-06-01%20at%2020.04.15.png",
+    tag: "Salsa & Arkan",
+    previewUrl: "https://preview.duajiwa.com/minimalist-ivory",
+    features: [
+      "Desain bersih & modern",
+      "RSVP digital",
+      "Google Maps terintegrasi",
+      "Countdown timer",
+    ],
+    desc: "Template minimalis dengan palet ivory & charcoal. Timeless dan cocok untuk semua konsep pernikahan.",
+  },
+  {
+    id: 3,
+    title: "Template Risa & Fany",
+    designer: "aishya",
+    style: "Placeholder",
+    price: "Rp 0",
+    likes: 0,
+    views: "0",
+    rating: 0,
+    src: "https://ik.imagekit.io/mnj81d29i/Screenshot%202026-06-01%20at%2020.13.24.png",
+    tag: "Risa & Fany",
+    previewUrl: "#",
+    features: ["Fitur placeholder"],
+    desc: "Deskripsi placeholder untuk template Risa & Fany.",
   },
 ];
 
@@ -39,16 +81,126 @@ const CATEGORIES = [
   "Batak",
 ];
 
+function buildWAUrl(template) {
+  const text = `Halo kak!\n\nAku mau pesan template undangan ini:\n\n*${template.title}* (${template.price})\nLink preview: ${template.previewUrl}\n\nBoleh info cara ordernya? 🙏`;
+  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+}
+
+function buildConsultationWAUrl() {
+  const text = "Halo kak! Aku mau konsultasi soal undangan pernikahan 🙏";
+  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+}
+
+function PreviewModal({ template, onClose }) {
+  if (!template) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white w-full sm:max-w-2xl sm:rounded-2xl rounded-t-2xl overflow-hidden shadow-2xl"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-5 py-4 border-b border-stone-100">
+          <h3 className="font-semibold text-stone-800">{template.title}</h3>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-full hover:bg-stone-100 transition-colors"
+            aria-label="Close preview modal"
+          >
+            <X size={18} className="text-stone-500" />
+          </button>
+        </div>
+
+        <div className="flex flex-col sm:flex-row">
+          <div className="sm:w-52 h-48 sm:h-auto bg-gradient-to-br from-rose-50 to-amber-50 flex-shrink-0 flex items-center justify-center">
+            {template.src ? (
+              <img
+                src={template.src}
+                alt={template.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-5xl">💌</span>
+            )}
+          </div>
+
+          <div className="flex-1 p-5">
+            <div className="flex items-center gap-2 mb-3">
+              {template.tag && (
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-100">
+                  {template.tag}
+                </span>
+              )}
+              <span className="text-xs text-stone-400">{template.style}</span>
+            </div>
+
+            <p className="text-sm text-stone-600 leading-relaxed mb-4">
+              {template.desc}
+            </p>
+
+            <ul className="space-y-1.5 mb-5">
+              {template.features.map((feature) => (
+                <li
+                  key={feature}
+                  className="flex items-center gap-2 text-sm text-stone-600"
+                >
+                  <CheckCircle
+                    size={14}
+                    className="text-rose-500 flex-shrink-0"
+                  />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <p className="text-xs text-stone-400">Harga</p>
+                <p className="text-xl font-bold text-rose-600">
+                  {template.price}
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <a
+                  href={template.previewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-1.5 text-sm font-medium border border-stone-200 text-stone-600 px-4 py-2.5 rounded-full hover:border-rose-300 hover:text-rose-600 transition-colors"
+                >
+                  <ExternalLink size={14} /> Preview
+                </a>
+                <a
+                  href={buildWAUrl(template)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-1.5 text-sm font-semibold bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-full transition-colors"
+                >
+                  <MessageCircle size={14} /> Pesan via WA
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-rose-100">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="/" className="flex items-center gap-2">
-          <span className="text-2xl font-display text-rose-600 tracking-tight leading-none">
-            dua<span className="text-stone-800">jiwa</span>
-          </span>
+        <a href="/" className="flex items-center gap-2" aria-label="Duajiwa home">
+          <img
+            src="/logo%20duajiwa.png"
+            alt="Duajiwa"
+            className="h-9 w-auto"
+          />
         </a>
 
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-stone-500">
@@ -64,12 +216,14 @@ function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <button className="text-sm font-medium text-stone-600 hover:text-rose-600 transition-colors px-4 py-2">
-            Sign in
-          </button>
-          <button className="text-sm font-semibold bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-full transition-colors">
-            Get Started
-          </button>
+          <a
+            href={buildConsultationWAUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-sm font-semibold bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-full transition-colors"
+          >
+            <MessageCircle size={15} /> Hubungi Kami
+          </a>
         </div>
 
         <button
@@ -86,17 +240,21 @@ function Navbar() {
           <a href="#">Designers</a>
           <a href="#">How It Works</a>
           <hr className="border-rose-100" />
-          <a href="#">Sign in</a>
-          <button className="w-full bg-rose-600 text-white py-2.5 rounded-full font-semibold">
-            Get Started
-          </button>
+          <a
+            href={buildConsultationWAUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full bg-rose-600 text-white py-2.5 rounded-full font-semibold text-center"
+          >
+            Hubungi Kami
+          </a>
         </div>
       )}
     </nav>
   );
 }
 
-function HeroSection() {
+function HeroSection({ onBrowse }) {
   return (
     <section className="relative pt-32 pb-20 px-6 overflow-hidden bg-gradient-to-br from-rose-50 via-white to-amber-50">
       <div className="absolute -top-32 -right-32 w-96 h-96 bg-rose-200/30 rounded-full blur-3xl pointer-events-none" />
@@ -108,20 +266,29 @@ function HeroSection() {
             ✦ Wedding Invitation Templates
           </span>
           <h1 className="font-display text-5xl md:text-6xl leading-[1.1] text-stone-900 mb-6">
-            Beautiful templates for your{" "}
-            <span className="text-rose-600 italic">most special day</span>
+            Semua Kebutuhan Pernikahanmu dalam{" "}
+            <span className="text-rose-600 italic">Satu Platform</span>
           </h1>
           <p className="text-stone-500 text-lg leading-relaxed mb-8 max-w-md">
-            Discover handcrafted digital wedding invitations. Customize,
-            download, and send — in minutes.
+            Dari undangan website, buku tamu digital, hingga wedding planner,
+            kami membantu pasangan menyiapkan pernikahan dengan lebih praktis,
+            modern, dan terorganisir.
           </p>
           <div className="flex flex-wrap gap-3">
-            <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold px-7 py-3.5 rounded-full transition-colors text-sm">
-              <Heart size={16} fill="white" /> Browse Templates
+            <button
+              onClick={onBrowse}
+              className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold px-7 py-3.5 rounded-full transition-colors text-sm"
+            >
+              <Heart size={16} fill="white" /> Lihat Template
             </button>
-            <button className="flex items-center gap-2 border border-stone-200 hover:border-rose-300 text-stone-700 font-semibold px-7 py-3.5 rounded-full transition-colors text-sm">
-              How It Works <ChevronDown size={14} />
-            </button>
+            <a
+              href={buildConsultationWAUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 border border-stone-200 hover:border-rose-300 text-stone-700 font-semibold px-7 py-3.5 rounded-full transition-colors text-sm"
+            >
+              <MessageCircle size={16} /> Konsultasi Gratis
+            </a>
           </div>
 
           <div className="flex items-center gap-6 mt-10">
@@ -136,7 +303,7 @@ function HeroSection() {
             </div>
             <p className="text-sm text-stone-500">
               <span className="font-semibold text-stone-800">2,400+</span>{" "}
-              couples trusted us
+              pasangan sudah pesan
             </p>
           </div>
         </div>
@@ -195,11 +362,22 @@ function SearchBar() {
   );
 }
 
-function TemplateCard({ template }) {
+function TemplateCard({ template, onSelect }) {
   const [liked, setLiked] = useState(false);
 
   return (
-    <div className="group relative bg-white rounded-2xl overflow-hidden border border-stone-100 hover:border-rose-200 hover:shadow-xl transition-all duration-300">
+    <div
+      className="group relative bg-white rounded-2xl overflow-hidden border border-stone-100 hover:border-rose-200 hover:shadow-xl transition-all duration-300 cursor-pointer"
+      onClick={() => onSelect(template)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onSelect(template);
+        }
+      }}
+      role="button"
+      tabIndex={0}
+    >
       <div className="relative aspect-[3/4] bg-gradient-to-br from-rose-50 to-amber-50 overflow-hidden">
         {template.src ? (
           <img
@@ -223,17 +401,33 @@ function TemplateCard({ template }) {
         )}
 
         <div className="absolute inset-0 bg-stone-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
-          <button className="bg-white text-stone-800 text-xs font-semibold px-5 py-2.5 rounded-full hover:bg-rose-600 hover:text-white transition-colors">
-            Preview
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              onSelect(template);
+            }}
+            className="bg-white text-stone-800 text-xs font-semibold px-5 py-2.5 rounded-full hover:bg-rose-600 hover:text-white transition-colors"
+          >
+            Lihat Detail
           </button>
-          <button className="bg-rose-600 text-white text-xs font-semibold px-5 py-2.5 rounded-full hover:bg-rose-700 transition-colors">
-            Get Template
-          </button>
+          <a
+            href={buildWAUrl(template)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-rose-600 text-white text-xs font-semibold px-5 py-2.5 rounded-full hover:bg-rose-700 transition-colors flex items-center gap-1.5"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <MessageCircle size={12} /> Pesan
+          </a>
         </div>
 
         <button
-          onClick={() => setLiked(!liked)}
+          onClick={(event) => {
+            event.stopPropagation();
+            setLiked(!liked);
+          }}
           className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center transition-colors hover:bg-rose-50"
+          aria-label={liked ? "Unlike template" : "Like template"}
         >
           <Heart
             size={14}
@@ -254,34 +448,19 @@ function TemplateCard({ template }) {
 
         <p className="text-xs text-stone-400 mb-3">{template.style}</p>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center">
-              <span className="text-[8px] text-white font-bold">DJ</span>
-            </div>
-            <span className="text-xs text-stone-500">{template.designer}</span>
-          </div>
-
-          <div className="flex items-center gap-3 text-xs text-stone-400">
-            <span className="flex items-center gap-1">
-              <Heart size={11} /> {template.likes}
-            </span>
-            <span className="flex items-center gap-1">
-              <Eye size={11} /> {template.views}
-            </span>
-            <span className="flex items-center gap-1 text-amber-500">
-              <Star size={11} fill="currentColor" /> {template.rating}
-            </span>
-          </div>
+        <div className="flex items-center">
+          <span className="text-xs text-stone-500">
+            Template by {template.designer}
+          </span>
         </div>
       </div>
     </div>
   );
 }
 
-function TemplateGrid() {
+function TemplateGrid({ onSelect }) {
   return (
-    <section className="max-w-7xl mx-auto px-6 py-12">
+    <section id="templates" className="max-w-7xl mx-auto px-6 py-12">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="font-display text-3xl text-stone-800">
@@ -301,20 +480,9 @@ function TemplateGrid() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
         {TEMPLATES.map((t) => (
-          <TemplateCard key={t.id} template={t} />
+          <TemplateCard key={t.id} template={t} onSelect={onSelect} />
         ))}
 
-        {Array.from({ length: Math.max(0, 10 - TEMPLATES.length) }).map(
-          (_, i) => (
-            <div
-              key={`empty-${i}`}
-              className="aspect-[3/4] rounded-2xl bg-gradient-to-br from-stone-50 to-rose-50 border border-dashed border-stone-200 flex flex-col items-center justify-center gap-2 text-stone-300"
-            >
-              <span className="text-3xl">+</span>
-              <span className="text-xs">Coming soon</span>
-            </div>
-          ),
-        )}
       </div>
     </section>
   );
@@ -337,7 +505,12 @@ function Footer() {
           <a href="#" className="hover:text-rose-600 transition-colors">
             Terms
           </a>
-          <a href="#" className="hover:text-rose-600 transition-colors">
+          <a
+            href={`https://wa.me/${WA_NUMBER}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-rose-600 transition-colors"
+          >
             Contact
           </a>
         </div>
@@ -347,13 +520,25 @@ function Footer() {
 }
 
 export default function HomePage() {
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+
+  const scrollToTemplates = () => {
+    document.getElementById("templates")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div className="min-h-screen bg-white font-sans">
       <Navbar />
-      <HeroSection />
+      <HeroSection onBrowse={scrollToTemplates} />
       <SearchBar />
-      <TemplateGrid />
+      <TemplateGrid onSelect={setSelectedTemplate} />
       <Footer />
+      {selectedTemplate && (
+        <PreviewModal
+          template={selectedTemplate}
+          onClose={() => setSelectedTemplate(null)}
+        />
+      )}
     </div>
   );
 }
