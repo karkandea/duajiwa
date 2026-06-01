@@ -1,0 +1,9 @@
+@config "../tailwind.config.js";
+@import "@fontsource/dm-sans";
+@import "@fontsource/cormorant-garamond";
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
