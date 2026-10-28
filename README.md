@@ -1,16 +1,49 @@
-# React + Vite
+# DuaJiwa — Digital Invitation Marketplace Concept
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React/Vite storefront concept for browsing digital wedding invitation designs and starting an inquiry through WhatsApp. The project explores a lightweight catalog, visual previews, and a subdomain-based invitation delivery path.
 
-Currently, two official plugins are available:
+[View the frontend demo](https://duajiwa-alpha.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Implemented experience
 
-## React Compiler
+- Responsive landing page with invitation template cards, categories, and preview interactions.
+- Design details, illustrative pricing, and a WhatsApp inquiry flow.
+- Hostname-based routing: the main site renders the marketplace, while a subdomain requests invitation data from an API.
+- Explicit loading and not-found states for the invitation-data request.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack and structure
 
-## Expanding the ESLint configuration
+| Layer | Source |
+| --- | --- |
+| UI | React 19, Vite 8, Tailwind CSS 4, Lucide icons |
+| Marketplace | [`src/pages/HomePage.jsx`](src/pages/HomePage.jsx) |
+| Invitation route | [`src/pages/InvitationPage.jsx`](src/pages/InvitationPage.jsx) |
+| API adapter | [`src/utils/api.js`](src/utils/api.js) |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Run locally
+
+Requirements: Node.js compatible with Vite 8 and npm.
+
+```bash
+npm ci
+npm run dev
+```
+
+Open the local URL printed by Vite. The marketplace screen uses local sample catalog data; no backend is needed to explore that page.
+
+To test subdomain invitation lookup, configure `VITE_API_URL` for a compatible invitation API. Client-exposed `VITE_` variables must never contain secrets. The corresponding API needs to provide `GET /api/invitations/:subdomain`.
+
+```bash
+npm run lint
+npm run build
+npm run preview
+```
+
+## Current boundaries
+
+- Template listings, views, likes, ratings, and prices are illustrative UI content, not verified sales or live marketplace metrics.
+- Invitation detail currently displays fetched JSON for inspection; it is **not** a finished invitation renderer.
+- The WhatsApp flow starts an inquiry; it does not complete checkout or process payment.
+- Invitation creation API utilities exist, but this repository does not demonstrate a complete publisher/admin workflow.
+
+**Status:** Frontend concept/prototype. Appropriate as a small UI case study with those limitations, rather than a claim of a launched end-to-end invitation platform.
